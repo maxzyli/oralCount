@@ -21,9 +21,14 @@
 		#history{
 			float: left;
 		}
+		.countContent{width:80%;text-align: center;}
 		table,td{
 			border: 1px solid #333;
 		}
+		td.txtR{
+			text-align:right;
+		}
+		.txtL{text-align:left;}
 		.lvl0{ background-color: #7B76FF; color:#fff;}
 		.lvl1{ background-color: #ABB1BA; color:#fff;}
 		.lvl2{ background-color: #FFCE45; color:#fff;}
@@ -69,7 +74,7 @@
 	var htmlEqual="<span>=</span>";
 	var htmlCorrect="<span class=\"correct\">恭喜你，答对了!</span>";
 	var htmlWrong ="<span class=\"wrong\">很遗憾，答错了!</span>";
-	var htmlInput="<span id=\"s{id}\"><input id=\"{id}\" value=\"\"/></span>";
+	var htmlInput="<span id=\"s{id}\"><input type=\"number\" id=\"{id}\" value=\"\" oninput=\"value=value.match(/-?[0-9]*\.?[0-9]*/)\"/></span>";
 	//var htmlInput="<span id=\"s{id}\"><input id=\"{id}\" value=\"{result}\"/></span>";
 
 	
@@ -136,16 +141,16 @@
 			var elm2=htmlSpan.replace("{value}",question["2"]);
 			var joint1=htmlSpan.replace("{value}",question["joint1"]);
 			var result=htmlInput.replaceAll("{id}","id"+i).replace("{result}",question["ans"]);
-			var questionHtml=elm1+joint1+elm2+htmlEqual+result;
+			var questionHtml="<td class=\"txtR\">"+elm1+joint1+elm2+htmlEqual+"</td><td class=\"txtL\">"+result+"</td>";
 			if(question["3"]!=undefined){
 				var elm3=htmlSpan.replace("{value}",question["3"]);	
 				var joint2=htmlSpan.replace("{value}",question["joint2"]);
-				questionHtml=elm1+joint1+elm2+joint2+elm3+htmlEqual+result;
+				questionHtml="<td class=\"txtR\">"+elm1+joint1+elm2+joint2+elm3+htmlEqual+"</td><td class=\"txtL\">"+result+"</td>";
 			}	
 
-			pagerHtml=pagerHtml+questionHtml+"<br/>";
+			pagerHtml=pagerHtml+"<tr>"+questionHtml+"</tr>";
 		}	
-		document.getElementById("pager").innerHTML=pagerHtml;
+		document.getElementById("pager").innerHTML="<table class=\"countContent\"><tbody>"+pagerHtml+"</tbody></table>";
 
 		document.getElementById("id0").focus();
 	}
@@ -171,8 +176,10 @@
 					spanElement.appendHTML(htmlCorrect);
 					moveNext(i);
 				}else{
-					console.log("很遗憾，答错了");
-					spanElement.appendHTML(htmlWrong);
+					if(isNotBlank(v)){
+						console.log("很遗憾，答错了");
+						spanElement.appendHTML(htmlWrong);	
+					}
 				}
 				calcuateTotal(pagerCombo[i]);
 			}
@@ -224,6 +231,16 @@
 
 		renderHistory();
 	}
+
+	setInterval(function(){
+		if(total==100){
+			return;
+		}else{
+			var endDate=new Date();
+			var usedTime=(endDate-startDate)/1000; 
+			document.getElementById("usedTime").innerHTML=usedTime;
+		}
+	},100);
 
 	function persistent(){
 		for(var i=0;i<sessionStorage.length;i++){
@@ -324,8 +341,9 @@
 			return {"key":"深渊王者"+star +"星","id":7};
 		}	
 	}
-
-
+	function isNotBlank(str){
+		return !(str===undefined||str==="");
+	}
 
  window.onload = function(){
 	
