@@ -42,9 +42,11 @@
 <body>
 <span>总分：</span><span id="total">0</span>
 <span>用时：</span><span id="usedTime">0</span><span>秒</span>
+<input type="button" id="refresh" value="刷新" onclick="refresh(event)"/>
 <div style="position:relative;">
 <div id="pager">
 </div>
+
 <div id="history">
 	<table>
 		<thead id="historyHeader">
@@ -77,7 +79,13 @@
 	var htmlInput="<span id=\"s{id}\"><input type=\"number\" id=\"{id}\" value=\"\" oninput=\"value=value.match(/-?[0-9]*\.?[0-9]*/)\"/></span>";
 	//var htmlInput="<span id=\"s{id}\"><input id=\"{id}\" value=\"{result}\"/></span>";
 
-	
+	function refresh(event){
+		event.preventDefault();
+		startDate=new Date();
+		pagerCombo=[];
+		console.log("refresh");
+		renderPager();
+	}
 
 	HTMLElement.prototype.appendHTML = function(html) {
 	    var divTemp = document.createElement("div"), nodes = null, fragment = document.createDocumentFragment();
@@ -98,7 +106,7 @@
 			var randomType=Math.round(Math.random()*2);
 			var question={
 				"1":random,
-				"joint1":Math.round(Math.random()*2)==2?"-":"+",
+				"joint1":Math.random()*3>=1.5?"-":"+",
 				"2":random2,
 				"inputAns":""
 			};
@@ -133,11 +141,13 @@
 	}
 	function renderPager(){
 		initPagerDataModel();
+		alert(JSON.stringify(pagerCombo));
 		var pagerHtml="";	
 		for(var i=0;i<questionNumber;i++){
 			var question=pagerCombo[i];
-
+			alert("replace");
 			var elm1=htmlSpan.replace("{value}",question["1"]);	
+			alert("after replace");
 			var elm2=htmlSpan.replace("{value}",question["2"]);
 			var joint1=htmlSpan.replace("{value}",question["joint1"]);
 			var result=htmlInput.replaceAll("{id}","id"+i).replace("{result}",question["ans"]);
