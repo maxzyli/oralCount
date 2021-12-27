@@ -250,10 +250,10 @@
 
 		localStorage.setItem(saveKey,JSON.stringify({
 			"total":total,
-			"pager":pagerCombo,
 			"usedTime":usedTime,
 			"startDate":startDate
 		}));
+		//"pager":pagerCombo,
 
 		renderHistory();
 	}
@@ -372,12 +372,10 @@
 	}
 
  window.onload = function(){
- 	renderPager();
+	 renderPager();
 	registerEvent();
 	renderHistory();
  }	
-
-
 </script>
 </body>
 </html>
