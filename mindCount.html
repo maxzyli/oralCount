@@ -21,6 +21,7 @@
 		#history{
 			float: left;
 		}
+		.fl{float:left;}
 		.countContent{width:80%;text-align: center;}
 		table,td{
 			border: 1px solid #333;
@@ -37,12 +38,23 @@
 		.lvl5{ background-color: #A6E22B; color:#fff;}
 		.lvl6{ background-color: #3078A1; color:#fff;}
 		.lvl7{ background-color: #FF0000; color:#fff;}
+
+		.header{
+			width:100%;
+			height: 23px;
+			position: fixed;
+			background: #D1EDF7; 
+			z-index:10;
+		}
 	</style>
 </head>
 <body>
-<span>总分：</span><span id="total">0</span>
-<span>用时：</span><span id="usedTime">0</span><span>秒</span>
-<input type="button" id="refresh" value="刷新" onclick="refresh(event)"/>
+<div class="header">
+	<input type="button" id="refresh" value="刷新" onclick="refresh(event)"/>
+	<span>总分：</span><span id="total">0</span>
+	<span>用时：</span><span style="width:100px;display:inline-block;" id="usedTime">0</span><span>秒</span>
+</div>
+<div style="height:30px"></div>
 <div style="position:relative;">
 <div id="pager">
 </div>
@@ -61,7 +73,12 @@
 		</tbody>
     </table>
 </div>
-</div>	
+<div class="fl">
+<ul>
+	<li><a href="mindCountMul.html">乘法口算</a></li>
+</ul>		
+</div>
+</div>
 
 <script type="text/javascript">
 	var pagerCombo=[];
@@ -144,7 +161,9 @@
 		var pagerHtml="";	
 		for(var i=0;i<questionNumber;i++){
 			var question=pagerCombo[i];
+			
 			var elm1=htmlSpan.replace("{value}",question["1"]);	
+			
 			var elm2=htmlSpan.replace("{value}",question["2"]);
 			var joint1=htmlSpan.replace("{value}",question["joint1"]);
 			var result=htmlInput.replace("{id}","id"+i).replace("{id}","id"+i).replace("{result}",question["ans"]);
@@ -353,12 +372,11 @@
 	}
 
  window.onload = function(){
-	
- }	
-
- renderPager();
+ 	renderPager();
 	registerEvent();
 	renderHistory();
+ }	
+
 
 </script>
 </body>

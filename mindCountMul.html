@@ -3,7 +3,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-	<title>口算练习</title>
+	<title>乘法练习</title>
 	<style type="text/css">
 		.correct{
 			color:green;
@@ -21,6 +21,7 @@
 		#history{
 			float: left;
 		}
+		.fl{float:left;}
 		.countContent{width:80%;text-align: center;}
 		table,td{
 			border: 1px solid #333;
@@ -37,12 +38,23 @@
 		.lvl5{ background-color: #A6E22B; color:#fff;}
 		.lvl6{ background-color: #3078A1; color:#fff;}
 		.lvl7{ background-color: #FF0000; color:#fff;}
+		.header{
+			width:100%;
+			height: 23px;
+			position: fixed;
+			background: #D1EDF7; 
+			z-index:10;
+		}
 	</style>
 </head>
 <body>
-<span>总分：</span><span id="total">0</span>
-<span>用时：</span><span id="usedTime">0</span><span>秒</span>
+	<div class="header">
 <input type="button" id="refresh" value="刷新" onclick="refresh(event)"/>
+<span>乘法係數：</span><input type="text" id="spec" value="9" onchange="update(event)" maxlength="2"/>
+<span>总分：</span><span id="total">0</span>
+<span>用时：</span><span style="width:100px;display:inline-block;" id="usedTime">0</span><span>秒</span>
+</div>
+	<div style="height:30px"></div>
 <div style="position:relative;">
 <div id="pager">
 </div>
@@ -61,10 +73,18 @@
 		</tbody>
     </table>
 </div>
-</div>	
+<div class="fl">
+<ul>
+	<li><a href="mindCount.html">加減法口算</a></li>
+</ul>		
+</div>
+</div>
+
 
 <script type="text/javascript">
 	var pagerCombo=[];
+	var multipleTable=[];
+	var multipleSpec=9;
 	var total=0;
 	var questionNumber=25;
 	var pointPerQuestion=100/questionNumber;
@@ -79,12 +99,35 @@
 	var htmlInput="<span id=\"s{id}\"><input type=\"number\" id=\"{id}\" value=\"\" oninput=\"value=value.match(/-?[0-9]*\.?[0-9]*/)\"/></span>";
 	//var htmlInput="<span id=\"s{id}\"><input id=\"{id}\" value=\"{result}\"/></span>";
 
+	function update(event){
+		multipleSpec=Number(document.getElementById("spec").value)||9;
+		event.preventDefault();
+		startDate=new Date();
+		pagerCombo=[]; 
+		multipleTable=[];
+		renderPager();
+	}
 	function refresh(event){
 		event.preventDefault();
 		startDate=new Date();
 		pagerCombo=[];
 		console.log("refresh");
 		renderPager();
+	}
+
+	function initialMultipleTable(){
+		for(var i=1;i<=multipleSpec;i++){
+			for(var j=1;j<=multipleSpec;j++){
+				var question={
+					"1":i,
+					"joint1":"x",
+					"2":j,
+					"inputAns":""
+				}; 
+				question["ans"]=question["1"]*question["2"]; 
+				multipleTable.push(question);
+			}
+		}
 	}
 
 	HTMLElement.prototype.appendHTML = function(html) {
@@ -100,60 +143,34 @@
 	};
 
 	function initPagerDataModel(){
+		initialMultipleTable();
+		var seed=[];
+
+		while(seed.length!=questionNumber){
+			var random=Math.round(Math.random()*multipleTable.length);
+			if(seed.indexOf(random)==-1){
+				seed.push(random);
+			}
+		}
 		for(var i=0;i<questionNumber;i++){
-			var random=Math.round(Math.random()*10);
-			var random2=Math.round(Math.random()*20);
-			var randomType=Math.round(Math.random()*2);
-			var question={
-				"1":random,
-				"joint1":Math.random()*3>=1.5?"-":"+",
-				"2":random2,
-				"inputAns":""
-			};
-			if(question.joint1=="+"){
-					question["ans"]=question["1"]+question["2"];
-			}else{
-				if(question["1"]<question["2"]){
-					var exchange=question["1"];
-					question["1"]=question["2"];
-					question["2"]=exchange;
-				}
-				question["ans"]=question["1"]-question["2"];
-			}
-
-			if(randomType==2){
-				question["3"]=Math.round(Math.random()*10);
-				question["joint2"]=Math.round(Math.random()*2)==2?"-":"+";
-
-				if(question.joint2=="+"){
-					question["ans"]=question["ans"]+question["3"];
-				}else{
-					if(question["ans"]<question["3"]){
-						question["joint2"]="+";
-						question["ans"]=question["ans"]+question["3"];
-					}else{
-						question["ans"]=question["ans"]-question["3"];	
-					}
-				}
-			}
+			var question=multipleTable[seed[i]];
 			pagerCombo.push(question);	
 		}
 	}
 	function renderPager(){
 		initPagerDataModel();
+		
 		var pagerHtml="";	
 		for(var i=0;i<questionNumber;i++){
 			var question=pagerCombo[i];
+			
 			var elm1=htmlSpan.replace("{value}",question["1"]);	
+			
 			var elm2=htmlSpan.replace("{value}",question["2"]);
 			var joint1=htmlSpan.replace("{value}",question["joint1"]);
 			var result=htmlInput.replace("{id}","id"+i).replace("{id}","id"+i).replace("{result}",question["ans"]);
 			var questionHtml="<td class=\"txtR\">"+elm1+joint1+elm2+htmlEqual+"</td><td class=\"txtL\">"+result+"</td>";
-			if(question["3"]!=undefined){
-				var elm3=htmlSpan.replace("{value}",question["3"]);	
-				var joint2=htmlSpan.replace("{value}",question["joint2"]);
-				questionHtml="<td class=\"txtR\">"+elm1+joint1+elm2+joint2+elm3+htmlEqual+"</td><td class=\"txtL\">"+result+"</td>";
-			}	
+			 
 
 			pagerHtml=pagerHtml+"<tr>"+questionHtml+"</tr>";
 		}	
@@ -326,6 +343,10 @@
 
 	}
 
+	function renderMultipleTable(){
+
+	}
+
 	function level(levelScore){
 
 		if(levelScore>=0 && levelScore<500){
@@ -353,13 +374,10 @@
 	}
 
  window.onload = function(){
-	
- }	
-
- renderPager();
+	 renderPager();
 	registerEvent();
 	renderHistory();
-
+ }	
 </script>
 </body>
 </html>
