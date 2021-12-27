@@ -150,7 +150,7 @@
 		var seed=[];
 
 		while(seed.length!=questionNumber){
-			var random=Math.round(Math.random()*multipleTable.length);
+			var random=Math.round(Math.random()*(multipleTable.length-1));//start from 0
 			if(seed.indexOf(random)==-1){
 				seed.push(random);
 			}
@@ -166,6 +166,7 @@
 		var pagerHtml="";	
 		for(var i=0;i<questionNumber;i++){
 			var question=pagerCombo[i];
+			if(question==undefined)debugger;
 			
 			var elm1=htmlSpan.replace("{value}",question["1"]);	
 			
@@ -375,7 +376,7 @@
 	function isNotBlank(str){
 		return !(str===undefined||str==="");
 	}
- 
+
  window.onload = function(){
 	 renderPager();
 	registerEvent();
