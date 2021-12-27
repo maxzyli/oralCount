@@ -40,7 +40,7 @@
 		.lvl7{ background-color: #FF0000; color:#fff;}
 		.header{
 			width:100%;
-			height: 23px;
+			height: 41px;
 			position: fixed;
 			background: #D1EDF7; 
 			z-index:10;
@@ -50,11 +50,12 @@
 <body>
 	<div class="header">
 <input type="button" id="refresh" value="刷新" onclick="refresh(event)"/>
-<span>乘法係數：</span><input type="text" id="spec" value="9" onchange="update(event)" maxlength="2"/>
+
 <span>总分：</span><span id="total">0</span>
-<span>用时：</span><span style="width:100px;display:inline-block;" id="usedTime">0</span><span>秒</span>
+<span>用时：</span><span style="width:65px;display:inline-block;" id="usedTime">0</span><span>秒</span>
+<div style="display:inline-block;text-align: top"><span style="font-size:4px;">乘法系數</span><br/><input type="text" id="spec" value="9" onchange="update(event)" maxlength="2"/></div>
 </div>
-	<div style="height:30px"></div>
+<div style="height:30px"></div>
 <div style="position:relative;">
 <div id="pager">
 </div>
@@ -378,6 +379,7 @@
 	registerEvent();
 	renderHistory();
  }	
+
 </script>
 </body>
 </html>
