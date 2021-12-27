@@ -141,16 +141,13 @@
 	}
 	function renderPager(){
 		initPagerDataModel();
-		alert(JSON.stringify(pagerCombo));
 		var pagerHtml="";	
 		for(var i=0;i<questionNumber;i++){
 			var question=pagerCombo[i];
-			alert("replace");
 			var elm1=htmlSpan.replace("{value}",question["1"]);	
-			alert("after replace");
 			var elm2=htmlSpan.replace("{value}",question["2"]);
 			var joint1=htmlSpan.replace("{value}",question["joint1"]);
-			var result=htmlInput.replaceAll("{id}","id"+i).replace("{result}",question["ans"]);
+			var result=htmlInput.replace("{id}","id"+i).replace("{id}","id"+i).replace("{result}",question["ans"]);
 			var questionHtml="<td class=\"txtR\">"+elm1+joint1+elm2+htmlEqual+"</td><td class=\"txtL\">"+result+"</td>";
 			if(question["3"]!=undefined){
 				var elm3=htmlSpan.replace("{value}",question["3"]);	
