@@ -33,11 +33,11 @@
 		.lvl0{ background-color: #7B76FF; color:#fff;}
 		.lvl1{ background-color: #ABB1BA; color:#fff;}
 		.lvl2{ background-color: #FFCE45; color:#fff;}
-		.lvl3{ background-color: #AC80CE; color:#fff;}
+		.lvl3{ background-color: #AC80CE; color:#FFCE45;}
 		.lvl4{ background-color: #60D8DA; color:#fff;}
-		.lvl5{ background-color: #A6E22B; color:#fff;}
+		.lvl5{ background-color: #A6E22B; color:#FFCE45;}
 		.lvl6{ background-color: #3078A1; color:#fff;}
-		.lvl7{ background-color: #FF0000; color:#fff;}
+		.lvl7{ background-color: #FF0000; color:#FFCE45;}
 
 		.header{
 			width:100%;
@@ -99,6 +99,7 @@
 	function refresh(event){
 		event.preventDefault();
 		startDate=new Date();
+		saveKey="oralCount"+startDate.getTime();
 		pagerCombo=[];
 		console.log("refresh");
 		renderPager();
@@ -354,10 +355,9 @@
 		}else if(levelScore>=1000 && levelScore<1500){
 			return {"key":"荣耀黄金","id":2};
 		}else if(levelScore>=1500 && levelScore<2000){
-			return "永恒钻石";
 			return {"key":"永恒钻石","id":3};
 		}else if(levelScore>=2000 && levelScore<2500){
-			return {"key":"星耀","id":4};
+			return {"key":"至尊星耀","id":4};
 		}else if(levelScore>=2500 && levelScore<3000){
 			return {"key":"最强王者","id":5};
 		}else if(levelScore>=3000 && levelScore<3500){
